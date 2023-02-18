@@ -1,5 +1,7 @@
 ## GoIT Node.js Course Template Homework
 
+Kapu$ta team5 final project
+
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
 Форк створить репозиторій на вашому http://github.com
 
