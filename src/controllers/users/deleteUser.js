@@ -2,8 +2,7 @@ const { User } = require("../../schemas/user");
 
 const deleteUser = async (req, res, next) => {
   try {
-      const { _id } = req.user;
-      console.log(_id)
+    const { _id } = req.user;
     const response = await User.findByIdAndDelete(_id);
     if (!response) {
       res.status(404).json({ message: "Not found" });
@@ -13,7 +12,7 @@ const deleteUser = async (req, res, next) => {
       code: 200,
       message: "User deleted",
       data: {
-        result,
+        response,
       },
     });
   } catch (error) {
