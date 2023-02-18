@@ -9,4 +9,7 @@ router.post("/login", userController.login);
 router.get("/logout", authMiddleware, userController.logout);
 router.get("/current", authMiddleware, userController.current);
 
+router.get("/google", userController.googleAuth);
+router.get("/google-redirect", userController.googleRedirect);
+
 module.exports = router;
