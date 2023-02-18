@@ -21,7 +21,6 @@ const sendEmail = async (data) => {
     const emailData = { ...data, from: EMAIL_USER };
 
     const response = await transporter.sendMail(emailData);
-    console.log(response);
     return true;
   } catch (error) {
     console.log(error.message);

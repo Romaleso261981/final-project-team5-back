@@ -3,6 +3,7 @@ const gravatar = require("gravatar");
 const { v4: uuidv4 } = require("uuid");
 const { User } = require("../../schemas/user");
 const validateRegisterSchema = require("../../schemas/validation");
+const sendEmail = require("../../services/sendEmail")
 
 async function signup(req, res, next) {
   try {
@@ -36,7 +37,7 @@ async function signup(req, res, next) {
       to: email,
       subject: "Please, verify your email",
       html: `<a target="_blank"
-      href="http://localhost:3000/api/users/verify/${verificationToken}">Email verification</a>`,
+      href="http://localhost:3000/auth/users/verify/${verificationToken}">Email verification</a>`,
     };
 
     await sendEmail(msg);
