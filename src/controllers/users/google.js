@@ -1,6 +1,5 @@
 const queryString = require("querystring");
 const axios = require("axios");
-// const URL = require("url");
 
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
@@ -42,7 +41,6 @@ const googleRedirect = async (req, res) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     },
   });
-  console.log(userData.data)
   return res.redirect(
     `${process.env.FRONTEND_URL}?email=${userData.data.email}`
   );

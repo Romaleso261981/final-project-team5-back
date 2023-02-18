@@ -19,9 +19,9 @@ async function login(req, res, next) {
       res.status(401).json({ message: "Email or password is wrong" });
     }
 
-    // if (!user.verify) {
-    //   res.json({ message: "Your Email is not verifyied!" });
-    // }
+    if (!user.verify) {
+      res.json({ message: "Your Email is not verifyied!" });
+    }
 
     const payload = {
       id: user._id,
@@ -34,7 +34,6 @@ async function login(req, res, next) {
       token: token,
       user: {
         email: user.email,
-        subscription: user.subscription,
       },
     });
   } catch (error) {

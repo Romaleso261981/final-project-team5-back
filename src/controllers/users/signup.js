@@ -1,12 +1,12 @@
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
 const { v4: uuidv4 } = require("uuid");
-const { User } = require("../../schemas/user")
-const validateRegisterSchema = require("../../schemas/validation")
+const { User } = require("../../schemas/user");
+const validateRegisterSchema = require("../../schemas/validation");
 
 async function signup(req, res, next) {
   try {
-    // const { EMAIL_USER } = process.env;
+    const { EMAIL_USER } = process.env;
     const { email, password } = req.body;
     const { error } = validateRegisterSchema.validate(req.body);
     if (error) {
@@ -31,15 +31,15 @@ async function signup(req, res, next) {
       verificationToken,
     });
 
-    // const msg = {
-    //   from: EMAIL_USER,
-    //   to: email,
-    //   subject: "Please, verify your email",
-    //   html: `<a target="_blank" 
-    //   href="http://localhost:3000/api/users/verify/${verificationToken}">Email verification</a>`,
-    // };
+    const msg = {
+      from: EMAIL_USER,
+      to: email,
+      subject: "Please, verify your email",
+      html: `<a target="_blank"
+      href="http://localhost:3000/api/users/verify/${verificationToken}">Email verification</a>`,
+    };
 
-    // await sendEmail(msg);
+    await sendEmail(msg);
 
     res.status(201).json({
       status: "success",
