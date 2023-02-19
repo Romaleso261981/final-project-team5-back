@@ -1,5 +1,8 @@
 const queryString = require("querystring");
 const axios = require("axios");
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = process.env;
+const { User } = require("../../schemas/user");
 
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
