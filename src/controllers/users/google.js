@@ -4,7 +4,7 @@ const axios = require("axios");
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+    redirect_uri: `${process.env.BASE_URL}/auth/users/google-redirect`,
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -29,11 +29,12 @@ const googleRedirect = async (req, res) => {
     data: {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+      redirect_uri: `${process.env.BASE_URL}/auth/users/google-redirect`,
       grant_type: "authorization_code",
       code,
     },
   });
+
   const userData = await axios({
     url: "https://www.googleapis.com/oauth2/v2/userinfo",
     method: "get",
@@ -41,11 +42,33 @@ const googleRedirect = async (req, res) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     },
   });
-  return res.redirect(
-    `${process.env.FRONTEND_URL}?email=${userData.data.email}`
-  );
-};
 
+  const { email } = userData.data;
+  const user = await User.findOne({ email });
+  if (user) {
+    const payload = {
+      id: user._id,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+    await User.findByIdAndUpdate(user._id, { token });
+    return res.redirect(`${FRONTEND_URL}?token=${token}`);
+  } else {
+    const avatar = gravatar.url(email);
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
+      avatarURL: avatar,
+      verify: true,
+    });
+    const payload = {
+      id: newUser._id,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+    await User.findByIdAndUpdate(newUser._id, { token });
+
+    return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+  }
+};
 module.exports = {
   googleAuth,
   googleRedirect,
