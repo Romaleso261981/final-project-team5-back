@@ -1,8 +1,6 @@
 const { Schema, model } = require("mongoose");
-const {
-  constants: { TRANSACTION_TYPES },
-  getBalance,
-} = require("../utils");
+const { TRANSACTION_TYPES } = require("../utils/constants");
+const getBalance = require("../utils/getBalance");
 
 const schemaFinances = new Schema({
   date: {
@@ -16,7 +14,7 @@ const schemaFinances = new Schema({
     required: [true, "Unset transaction date"],
   },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "product-category",
     required: [true, "Set category of product for finance"],
   },
@@ -35,7 +33,7 @@ const schemaFinances = new Schema({
     required: [true, "Set type of transaction for finance"],
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "user",
     required: [true, "Set record owner of transaction for finance"],
   },
@@ -103,7 +101,7 @@ schemaFinances.pre(
   }
 );
 
-const Finance = mongoose.model("finances", schemaFinances);
+const Finance = model("finances", schemaFinances);
 
 module.exports = {
   Finance,
