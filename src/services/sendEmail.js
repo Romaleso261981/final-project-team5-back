@@ -1,30 +1,26 @@
-require("dotenv").config();
+const sendGrid = require("@sendgrid/mail");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const nodemailer = require("nodemailer");
+const { SENDGRID_API_KEY } = process.env;
 
-const { EMAIL_USER, EMAIL_PASS } = process.env;
+function createEmail(email, verificationToken) {
+  const confirmLink = `www.back.kapusta.click/auth/users/verify/${verificationToken}`;
+  const sendEmail = {
+    from: "kapusta@kapusta.click",
+    to: email,
+    subject: "Please confirm your email",
+    html: `<a href="http://${confirmLink}">Confirm your email</a>
+          <p>go to link ${confirmLink}</p>`,
+    text: `go to link ${confirmLink}`,
+  };
+  return sendEmail;
+}
 
-const config = {
-  host: "smtp.meta.ua",
-  port: 465,
-  secure: true,
-  auth: {
-    user: EMAIL_USER,
-    pass: EMAIL_PASS,
-  },
-};
-
-const transporter = nodemailer.createTransport(config);
-
-const sendEmail = async (data) => {
-  try {
-    const emailData = { ...data, from: EMAIL_USER };
-
-    const response = await transporter.sendMail(emailData);
-    return true;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+async function sendEmail(email, verificationToken) {
+  sendGrid.setApiKey(SENDGRID_API_KEY);
+  const response = await sendGrid.send(createEmail(email, verificationToken));
+  console.log(response);
+}
 
 module.exports = sendEmail;

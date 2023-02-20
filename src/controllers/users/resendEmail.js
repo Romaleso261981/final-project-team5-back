@@ -1,10 +1,11 @@
 const { User } = require("../../schemas/user");
 const sendEmail = require("../../services/sendEmail");
+const { v4: uuidv4 } = require("uuid");
 
 const resendEmail = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const { EMAIL_USER } = process.env;
+    const verificationToken = uuidv4();
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -17,15 +18,7 @@ const resendEmail = async (req, res, next) => {
       });
     }
 
-    const msg = {
-      from: EMAIL_USER,
-      to: email,
-      subject: "Please, verify your email",
-      html: `<a target="_blank" 
-      href="http://localhost:3000/api/users/verify/${user.verificationToken}">Email verification</a>`,
-    };
-
-    await sendEmail(msg);
+        await sendEmail(email, verificationToken);
     res.status(200).json({
       message: "Verification email sended",
     });

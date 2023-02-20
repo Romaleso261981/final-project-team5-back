@@ -6,7 +6,6 @@ const sendEmail = require("../../services/sendEmail");
 
 async function signup(req, res, next) {
   try {
-    const { EMAIL_USER } = process.env;
     const { email, password } = req.body;
     const { error } = validateRegisterSchema.validate(req.body);
     if (error) {
@@ -29,15 +28,7 @@ async function signup(req, res, next) {
       verificationToken,
     });
 
-    const msg = {
-      from: EMAIL_USER,
-      to: email,
-      subject: "Please, verify your email",
-      html: `<a target="_blank"
-      href="http://localhost:3000/auth/users/verify/${verificationToken}">Email verification</a>`,
-    };
-
-    await sendEmail(msg);
+    await sendEmail(email, verificationToken);
 
     res.status(201).json({
       status: "success",
