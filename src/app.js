@@ -1,6 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-kapusta.json");
 
 const financesRouter = require("./routes/api/financesRouter");
 const usersRouter = require("./routes/auth/usersRouter");
@@ -15,6 +17,7 @@ app.use(express.json());
 
 app.use("/api/finances", financesRouter);
 app.use("/auth/users", usersRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
