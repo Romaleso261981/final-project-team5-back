@@ -1,13 +1,13 @@
 const addFinance = require("./addFinance");
-const getAllFinances = require("./getAllFinances");
 const getFinance = require("./getFinance");
 const deleteFinance = require("./deleteFinance");
-const editFinance = require("./editFinance");
+const getCurrentBalance = require("./getCurrentBalance");
+const updateBalance = require("./updateBalance");
 
 module.exports = {
   addFinance,
-  getAllFinances,
   getFinance,
   deleteFinance,
-  editFinance,
+  getCurrentBalance,
+  updateBalance,
 };

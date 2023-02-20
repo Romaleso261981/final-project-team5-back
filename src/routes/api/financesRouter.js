@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-router.get("/", financeController.getAllFinances);
-router.get("/:financeId", financeController.getFinance);
+router.get("/", financeController.getFinance);
 router.post("/", financeController.addFinance);
 router.delete("/:financeId", financeController.deleteFinance);
-router.put("/:financeId", financeController.editFinance);
+router.get("/balance", financeController.getCurrentBalance);
+router.patch("/balance", financeController.updateBalance);
 
 module.exports = router;
