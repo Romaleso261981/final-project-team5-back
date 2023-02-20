@@ -14,6 +14,10 @@ const schema = mongoose.Schema({
     type: String,
     default: null,
   },
+  balance: {
+    type: Number,
+    default: 0,
+  },
   avatarURL: String,
 });
 

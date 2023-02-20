@@ -8,5 +8,7 @@ router.post("/signup", userController.signup);
 router.post("/login", userController.login);
 router.post("/logout", authMiddleware, userController.logout);
 router.post("/current", authMiddleware, userController.current);
+router.get("/balance", userController.getCurrentBalance);
+router.patch("/balance", userController.updateBalance);
 
 module.exports = router;
