@@ -16,9 +16,9 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "4.17.1",
-    "http-errors": "^2.0.0",
     "google-auth-library": "^8.7.0",
     "gravatar": "^1.8.2",
+    "http-errors": "^2.0.0",
     "joi": "^17.7.1",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.2",
@@ -26,6 +26,7 @@
     "nodemailer": "^6.9.1",
     "query-string": "^8.1.0",
     "sendgrid": "^5.2.3",
+    "swagger-ui-express": "^4.6.1",
     "url": "^0.11.0",
     "uuidv4": "^6.2.13"
   },
