@@ -6,7 +6,12 @@ const router = express.Router();
 
 router.post("/signup", userController.signup);
 router.post("/login", userController.login);
-router.post("/logout", authMiddleware, userController.logout);
-router.post("/current", authMiddleware, userController.current);
+router.get("/verify/:verificationToken", userController.verifyEmail);
+router.post("/resend", userController.resendEmail);
+router.get("/logout", authMiddleware, userController.logout);
+router.get("/current", authMiddleware, userController.current);
+
+router.get("/google", userController.googleAuth);
+router.get("/google-redirect", userController.googleRedirect);
 
 module.exports = router;

@@ -1,5 +1,16 @@
-async function current(req, res, next) {
-  return res.status(501).json({ message: "current Not Implemented" });
-}
+const current = async (req, res, next) => {
+  try {
+    const { email } = req.user;
+    res.json({
+      status: "success",
+      code: 200,
+      user: {
+        email,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = current;
