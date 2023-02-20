@@ -1,9 +1,8 @@
 const bcrypt = require("bcrypt");
-const gravatar = require("gravatar");
 const { v4: uuidv4 } = require("uuid");
 const { User } = require("../../schemas/user");
 const validateRegisterSchema = require("../../schemas/validation");
-const sendEmail = require("../../services/sendEmail")
+const sendEmail = require("../../services/sendEmail");
 
 async function signup(req, res, next) {
   try {
@@ -22,13 +21,11 @@ async function signup(req, res, next) {
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    const avatar = gravatar.url(email);
     const verificationToken = uuidv4();
 
     const newUser = await User.create({
       email,
       password: hashedPassword,
-      avatarURL: avatar,
       verificationToken,
     });
 
@@ -47,7 +44,6 @@ async function signup(req, res, next) {
       code: 201,
       user: {
         email: newUser.email,
-        avatar,
       },
     });
   } catch (error) {
