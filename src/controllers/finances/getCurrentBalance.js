@@ -1,6 +1,6 @@
 const createError = require("http-errors");
 const { Balance } = require("../../schemas/balance");
-const { constants } = require("../../utils");
+const constants = require("../../utils/constants");
 
 const { ERROR_MESSAGES } = constants;
 

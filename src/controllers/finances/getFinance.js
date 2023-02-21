@@ -1,7 +1,6 @@
 const { Finance } = require("../../schemas/finance");
-const { getDaysInterval, constants } = require("../../utils");
-
-const { TRANSACTION_TYPES } = constants;
+const { TRANSACTION_TYPES } = require("../../utils/constants");
+const getDaysInterval = require("../../utils/getDaysInterval");
 
 const getFinance = async (req, res) => {
   const { _id: owner } = req.user;
