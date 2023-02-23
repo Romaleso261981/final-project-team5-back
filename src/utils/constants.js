@@ -30,6 +30,9 @@ const ERROR_MESSAGES = {
   invalidAmountValue: "Invalid amount field value",
   missingIdQueryString: "Missing required transactionId query string",
   invalidIdQueryStringFormat: "Invalid value of transactionId query string",
+  invalidEmailFormat: "Invalid email format",
+  missingField: "Missing required field",
+  invalidValue: "Invalid value",
 };
 
 module.exports = {
