@@ -16,7 +16,7 @@ const balanceValidation = validation(
 
 router.use(authMiddleware);
 
-router.get("/", financeController.getCurrentBalance);
-router.patch("/", wrapper(balanceValidation), financeController.updateBalance);
+router.get("/balance", financeController.getCurrentBalance);
+router.patch("/balance", wrapper(balanceValidation), financeController.updateBalance);
 
 module.exports = router;

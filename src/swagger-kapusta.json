@@ -26,9 +26,7 @@
   "paths": {
     "/auth/users/signup": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
         "security": [],
@@ -40,10 +38,7 @@
               "schema": {
                 "title": "RegistrationRequest",
                 "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
+                "required": ["email", "password"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -133,9 +128,7 @@
     },
     "/auth/users/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "User login",
         "parameters": [],
         "security": [],
@@ -147,10 +140,7 @@
               "schema": {
                 "title": "LoginRequest",
                 "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
+                "required": ["email", "password"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -255,9 +245,7 @@
     },
     "/auth/users/logout": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "User logout",
         "parameters": [],
         "security": [
@@ -275,9 +263,7 @@
     },
     "/auth/users/current": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "User current",
         "parameters": [],
         "security": [
@@ -295,9 +281,7 @@
     },
     "/google": {
       "get": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "googleAuth",
         "parameters": [],
         "security": [],
@@ -311,9 +295,7 @@
     },
     "/google-redirect": {
       "get": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "googleRedirect",
         "parameters": [],
         "security": [],
@@ -325,11 +307,79 @@
         }
       }
     },
+    "/auth/users/balance": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "User balance update",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "New balance",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/BalanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/BalanceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get user balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "example": "10000"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
     "/api/finances/": {
       "get": {
-        "tags": [
-          "Finance"
-        ],
+        "tags": ["Finance"],
         "summary": "getAllFinances",
         "parameters": [],
         "security": [
@@ -345,9 +395,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Finance"
-        ],
+        "tags": ["Finance"],
         "summary": "addFinance",
         "parameters": [],
         "security": [
@@ -365,9 +413,7 @@
     },
     "/api/finances/financeId": {
       "get": {
-        "tags": [
-          "Finance"
-        ],
+        "tags": ["Finance"],
         "summary": "getFinance",
         "parameters": [],
         "security": [
@@ -383,9 +429,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Finance"
-        ],
+        "tags": ["Finance"],
         "summary": "editFinance",
         "parameters": [],
         "security": [
@@ -401,9 +445,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Finance"
-        ],
+        "tags": ["Finance"],
         "summary": "deleteFinance",
         "parameters": [],
         "security": [
@@ -424,10 +466,7 @@
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -438,6 +477,17 @@
             "type": "string",
             "description": "User's password",
             "example": "qwerty123"
+          }
+        }
+      },
+      "BalanceRequest": {
+        "type": "object",
+        "required": ["balance"],
+        "properties": {
+          "balance": {
+            "type": "integer",
+            "description": "User`s balance",
+            "example": "10000"
           }
         }
       },
@@ -464,6 +514,36 @@
             "avatar": "avatarURL"
           }
         ]
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User`s id",
+            "example": "630a521d9f4c9180f0"
+          },
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+          "token": {
+            "type": "string",
+            "description": "Token",
+            "example": "q1w2e3r4t5y6u7i8o9p0"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User`s avatar",
+            "example": ""
+          },
+          "balance": {
+            "type": "integer",
+            "description": "User`s balance",
+            "example": "10000"
+          }
+        }
       }
     },
     "securitySchemes": {
