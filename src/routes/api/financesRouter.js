@@ -43,7 +43,5 @@ router.delete(
   wrapper(deleteTransactionValidation),
   financeController.deleteFinance
 );
-router.get("/balance", financeController.getCurrentBalance);
-router.patch("/balance", financeController.updateBalance);
 
 module.exports = router;
