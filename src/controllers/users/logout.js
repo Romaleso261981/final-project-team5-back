@@ -6,7 +6,7 @@ async function logout(req, res, next) {
     await User.findByIdAndUpdate(_id, { token: null });
     return res.status(204).json(); // "Logout was successfull"
   } catch (error) {
-    return res.status(401).json({ message: "Not authorized" });
+    return res.status(500).json({ message: error.message });
   }
 }
 

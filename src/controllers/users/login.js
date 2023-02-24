@@ -20,7 +20,7 @@ async function login(req, res, next) {
     }
 
     if (!user.verify) {
-      return res.json({ message: "Your Email is not verifyied!" });
+      return res.status(401).json({ message: "Your Email is not verifyied!" });
     }
 
     const payload = {
@@ -28,16 +28,14 @@ async function login(req, res, next) {
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
     await User.findByIdAndUpdate(user._id, { token });
-    res.json({
-      status: "success",
-      code: 200,
+    res.status(200).json({
       token: token,
       user: {
         email: user.email,
       },
     });
   } catch (error) {
-    next(error);
+    return res.status(500).json({ message: error.message });
   }
 }
 

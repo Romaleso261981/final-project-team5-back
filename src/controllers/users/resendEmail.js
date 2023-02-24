@@ -22,14 +22,10 @@ const resendEmail = async (req, res, next) => {
       verificationToken,
     });
 
-    try {
-      await sendEmail(email, verificationToken);
-      return res.status(200).json({ message: "Verification email sended" });
-    } catch (error) {
-      return res.status(500).json({ message: error.message });
-    }
+    await sendEmail(email, verificationToken);
+    return res.status(200).json({ message: "Verification email sended" });
   } catch (error) {
-    next(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
