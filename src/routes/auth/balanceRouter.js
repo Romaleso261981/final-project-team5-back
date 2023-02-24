@@ -1,9 +1,9 @@
 const express = require("express");
 const { financeController } = require("../../controllers");
 const { authMiddleware } = require("../../middlewares/authMiddleware");
-const { validation } = require("../../middlewares/validationMiddleware");
-const { wrapper } = require("../../utils/wrapper");
-const { constants } = require("../../utils/constants");
+const validation = require("../../middlewares/validationMiddleware");
+const wrapper = require("../../utils/wrapper");
+const constants = require("../../utils/constants");
 const { validateBalanceShema } = require("../../schemas/validation");
 
 const router = express.Router();
@@ -17,6 +17,10 @@ const balanceValidation = validation(
 router.use(authMiddleware);
 
 router.get("/balance", financeController.getCurrentBalance);
-router.patch("/balance", wrapper(balanceValidation), financeController.updateBalance);
+router.patch(
+  "/balance",
+  wrapper(balanceValidation),
+  financeController.updateBalance
+);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../schemas/user");
-const validateRegisterSchema = require("../../schemas/validation");
+const { validateRegisterSchema } = require("../../schemas/validation");
 
 const { SECRET_KEY } = process.env;
 
