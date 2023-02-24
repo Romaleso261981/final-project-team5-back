@@ -1,34 +1,5 @@
 const { Finance } = require("../../schemas/finance");
 
-// const addFinance = async (req, res) => {
-//   const { _id: owner } = req.user;
-
-//   const newFinanceData = {
-//     type: req.body.type,
-//     completedAt: req.body.date,
-//     description: req.body.description,
-//     category: req.body.category,
-//     amount: req.body.amount,
-//   };
-
-//   const result = await Finance.create({ ...newFinanceData, owner });
-
-//   const { _id, type, completedAt, description, category, amount } = result;
-
-//   res.status(201).json({
-//     status: "success",
-//     code: 201,
-//     result: {
-//       _id,
-//       type,
-//       completedAt,
-//       description,
-//       category,
-//       amount,
-//     },
-//   });
-// };
-
 const addTransaction = async (req, res) => {
   const owner = req.user.id;
   const body = req.body;
@@ -36,11 +7,6 @@ const addTransaction = async (req, res) => {
     if (Object.keys(body).length === 0) {
       return res.status(400).json({ message: "missing fields" });
     }
-
-    // const validationResult = schemaTransaction.validate(body);
-    // if (validationResult.error) {
-    //   return res.status(400).json({ message: "invalid value content" });
-    // }
 
     const result = await Finance.create({ ...body, owner });
 
