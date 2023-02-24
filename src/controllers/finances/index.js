@@ -1,13 +1,25 @@
-const addFinance = require("./addFinance");
+const getBalance = require("./getBalance");
+const setBalance = require("./setBalance");
+
 const getFinance = require("./getFinance");
-const deleteFinance = require("./deleteFinance");
-const getCurrentBalance = require("./getCurrentBalance");
-const updateBalance = require("./updateBalance");
+const addExpenses = require("./addExpenses");
+const addIncome = require("./addIncome");
+const addTransaction = require("./addTransaction");
+const deleteTransaction = require("./deleteTransaction");
+
+const getSummary = require("./getSummary");
+const getSummaryExpenses = require("./getSummaryExpenses");
+const getSummaryIncome = require("./getSummaryIncome");
 
 module.exports = {
-  addFinance,
+  getBalance,
+  setBalance,
   getFinance,
-  deleteFinance,
-  getCurrentBalance,
-  updateBalance,
+  addExpenses,
+  addIncome,
+  addTransaction,
+  deleteTransaction,
+  getSummary,
+  getSummaryExpenses,
+  getSummaryIncome,
 };

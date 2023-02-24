@@ -2,7 +2,7 @@ const { User } = require("../../schemas/user");
 const sendEmail = require("../../services/sendEmail");
 const { v4: uuidv4 } = require("uuid");
 
-const resendEmail = async (req, res, next) => {
+async function resendEmail(req, res, next) {
   try {
     const { email } = req.body;
     const verificationToken = uuidv4();
@@ -27,6 +27,6 @@ const resendEmail = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-};
+}
 
 module.exports = resendEmail;

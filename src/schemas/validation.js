@@ -79,10 +79,15 @@ const validateBalanceShema = Joi.object({
   }),
 });
 
+const schemaBalance = Joi.object({
+  balance: Joi.number().required().positive(),
+});
+
 module.exports = {
   validateRegisterSchema,
   validateGetTransactionShema,
   validateAddTransactionShema,
   validateDeleteTransactionShema,
   validateBalanceShema,
+  schemaBalance,
 };

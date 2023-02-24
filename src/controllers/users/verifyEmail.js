@@ -1,6 +1,6 @@
 const { User } = require("../../schemas/user");
 
-const verifyEmail = async (req, res) => {
+async function verifyEmail(req, res) {
   const { verificationToken } = req.params;
 
   const user = await User.findOne({ verificationToken });
@@ -14,6 +14,6 @@ const verifyEmail = async (req, res) => {
     verify: true,
   });
   return res.status(200).json({ message: "Verification successful" });
-};
+}
 
 module.exports = verifyEmail;
