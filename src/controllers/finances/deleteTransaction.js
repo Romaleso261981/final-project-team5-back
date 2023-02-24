@@ -1,5 +1,5 @@
-const { Types } = require("mongoose");
-const createError = require("http-errors");
+// const { Types } = require("mongoose");
+// const createError = require("http-errors");
 const { Finance } = require("../../schemas/finance");
 
 const deleteTransaction = async (req, res) => {
@@ -21,7 +21,19 @@ const deleteTransaction = async (req, res) => {
   //   message: "transaction deleted",
   // });
 
-  return res.status(501).json({ message: "deleteTransaction" });
+  const owner = req.user.id;
+  const id = req.params.transactionId;
+
+  const contact = await Finance.findOneAndRemove({ _id: id, owner: owrenId });
+
+  if (contact) {
+    const temp = await Contact.findByIdAndDelete(id);
+    console.log("deleteContact", temp);
+
+    return res.status(200).json({ message: "contact deleted" });
+  }
+
+  return res.status(404).json({ message: "Not found" });
 };
 
 module.exports = deleteTransaction;

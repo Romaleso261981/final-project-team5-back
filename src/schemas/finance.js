@@ -4,23 +4,20 @@ const getBalance = require("../utils/getBalance");
 
 const schemaFinances = new Schema({
   date: {
-    type: { type: Date, default: Date.now },
+    type: Date,
+    default: Date.now,
   },
   description: {
     type: String,
-  },
-  completedAt: {
-    type: Date,
-    required: [true, "Unset transaction date"],
+    default: "",
   },
   category: {
-    type: Schema.Types.ObjectId,
-    ref: "product-category",
-    required: [true, "Set category of product for finance"],
+    type: String,
+    required: [true, "Set category for transaction"],
   },
   amount: {
     type: Number,
-    required: [true, "Set amount for finance"],
+    required: [true, "Set amount for transaction"],
   },
   currency: {
     type: String,
@@ -30,37 +27,49 @@ const schemaFinances = new Schema({
   type: {
     type: String,
     enum: ["expenses", "income"],
-    required: [true, "Set type of transaction for finance"],
+    required: [true, "Set type for transaction"],
   },
   owner: {
     type: Schema.Types.ObjectId,
     ref: "user",
-    required: [true, "Set record owner of transaction for finance"],
+    required: [true, "Set owner id for transaction"],
+  },
+  month: {
+    type: Number,
+    required: [true, "Set month for transaction"],
+  },
+  year: {
+    type: Number,
+    required: [true, "Set year for transaction"],
+  },
+  day: {
+    type: Number,
   },
 });
 
 // pre-hook for changing balance before adding transaction
 schemaFinances.pre("save", { document: true }, async function (next) {
-  const { owner, type, amount } = this;
+  console.log("test pre");
+  // const { owner, type, amount } = this;
 
-  const doc = await model("balance").findOne({ owner });
+  // const doc = await model("balance").findOne({ owner });
 
-  if (!doc) throw new Error("balance entry fee not set");
+  // if (!doc) throw new Error("balance entry fee not set");
 
-  const currentBalance = getBalance(doc);
+  // const currentBalance = getBalance(doc);
 
-  if (
-    type.toLowerCase() === TRANSACTION_TYPES.CREDIT &&
-    currentBalance < amount
-  ) {
-    throw new Error("insufficient balance");
-  }
+  // if (
+  //   type.toLowerCase() === TRANSACTION_TYPES.CREDIT &&
+  //   currentBalance < amount
+  // ) {
+  //   throw new Error("insufficient balance");
+  // }
 
-  type.toLowerCase() === TRANSACTION_TYPES.CREDIT
-    ? (doc.totalCost += amount)
-    : (doc.totalIncome += amount);
+  // type.toLowerCase() === TRANSACTION_TYPES.CREDIT
+  //   ? (doc.totalCost += amount)
+  //   : (doc.totalIncome += amount);
 
-  doc.save();
+  // doc.save();
   next();
 });
 

@@ -1,29 +1,19 @@
 const { Finance } = require("../../schemas/finance");
-const { TRANSACTION_TYPES } = require("../../utils/constants");
-const getDaysInterval = require("../../utils/getDaysInterval");
 
 const getFinance = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { type, period } = req.query;
+  const owner = req.user.id;
+  const body = req.body;
+  try {
+    if (Object.keys(body).length === 0) {
+      return res.status(400).json({ message: "missing fields" });
+    }
 
-  const [minPeriod, maxPeriod] = getDaysInterval(period);
+    const result = await Finance.find({ owner, ...body });
 
-  const types =
-    type === TRANSACTION_TYPES.ALL
-      ? [TRANSACTION_TYPES.DEBIT, TRANSACTION_TYPES.CREDIT]
-      : [type];
-
-  const result = await Finance.find({
-    owner,
-    type: { $in: types },
-    completedAt: { $gte: minPeriod, $lt: maxPeriod },
-  }).select({ owner: 0, createdAt: 0, updatedAt: 0 });
-
-  res.status(200).json({
-    status: "success",
-    code: 200,
-    result,
-  });
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 module.exports = getFinance;
