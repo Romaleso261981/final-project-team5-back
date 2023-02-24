@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
-const { TRANSACTION_TYPES } = require("../utils/constants");
-const getBalance = require("../utils/getBalance");
+// const { TRANSACTION_TYPES } = require("../utils/constants");
+// const getBalance = require("../utils/getBalance");
 
 const schemaFinances = new Schema({
   date: {
@@ -49,7 +49,7 @@ const schemaFinances = new Schema({
 
 // pre-hook for changing balance before adding transaction
 schemaFinances.pre("save", { document: true }, async function (next) {
-  console.log("test pre");
+  console.log("test pre save");
   // const { owner, type, amount } = this;
 
   // const doc = await model("balance").findOne({ owner });
@@ -78,34 +78,35 @@ schemaFinances.pre(
   "findOneAndRemove",
   { document: false, query: true },
   async function (next) {
-    const financeId = this.getQuery()._id;
+    console.log("test pre findOneAndRemove");
+    // const financeId = this.getQuery()._id;
 
-    const transaction = await model("finances").findOne({
-      _id: financeId,
-    });
+    // const transaction = await model("finances").findOne({
+    //   _id: financeId,
+    // });
 
-    if (!transaction) next();
+    // if (!transaction) next();
 
-    const { owner, type, amount } = transaction;
+    // const { owner, type, amount } = transaction;
 
-    const doc = await model("balance").findOne({ owner });
+    // const doc = await model("balance").findOne({ owner });
 
-    if (!doc) throw new Error("balance entry fee not set");
+    // if (!doc) throw new Error("balance entry fee not set");
 
-    const currentBalance = getBalance(doc);
+    // const currentBalance = getBalance(doc);
 
-    if (
-      type.toLowerCase() === TRANSACTION_TYPES.DEBIT &&
-      currentBalance < amount
-    ) {
-      throw new Error("Execution error. Negative balance expected");
-    }
+    // if (
+    //   type.toLowerCase() === TRANSACTION_TYPES.DEBIT &&
+    //   currentBalance < amount
+    // ) {
+    //   throw new Error("Execution error. Negative balance expected");
+    // }
 
-    type.toLowerCase() === TRANSACTION_TYPES.DEBIT
-      ? (doc.totalIncome -= amount)
-      : (doc.totalCost -= amount);
+    // type.toLowerCase() === TRANSACTION_TYPES.DEBIT
+    //   ? (doc.totalIncome -= amount)
+    //   : (doc.totalCost -= amount);
 
-    doc.save();
+    // doc.save();
     next();
   }
 );
