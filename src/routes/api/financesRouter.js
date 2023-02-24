@@ -30,5 +30,4 @@ module.exports = router;
 
 // 13. Реалізувати енд-поінт отримання докладної інформації (дивитися макет)
 //     про витрати та доходи за конкретні місяць та рік
-// Reports:
-//
+router.get("/reports", financeController.getReports);
