@@ -11,6 +11,9 @@
   "servers": [
     {
       "url": "http://back.kapusta.click"
+    },
+    {
+      "url": "http://localhost:3000"
     }
   ],
   "tags": [

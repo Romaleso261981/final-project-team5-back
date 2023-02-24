@@ -30,7 +30,7 @@ async function signup(req, res, next) {
 
     await sendEmail(email, verificationToken);
 
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       code: 201,
       user: {

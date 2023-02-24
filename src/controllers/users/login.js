@@ -10,17 +10,17 @@ async function login(req, res, next) {
     const { email, password } = req.body;
     const { error } = validateRegisterSchema.validate(req.body);
     if (error) {
-      res.status(400).json({ message: "Wrong email or password" });
+      return res.status(400).json({ message: "Wrong email or password" });
     }
 
     const user = await User.findOne({ email });
     const userPassword = await bcrypt.compare(password, user.password);
     if (!user || !userPassword) {
-      res.status(401).json({ message: "Email or password is wrong" });
+      return res.status(401).json({ message: "Email or password is wrong" });
     }
 
     if (!user.verify) {
-      res.json({ message: "Your Email is not verifyied!" });
+      return res.json({ message: "Your Email is not verifyied!" });
     }
 
     const payload = {
