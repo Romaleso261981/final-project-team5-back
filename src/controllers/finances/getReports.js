@@ -18,6 +18,14 @@ async function getReports(req, res) {
     if (form == 1) {
       const result = await Finance.find(searchParam);
       return res.status(200).json(result);
+    } else if (form == 2) {
+      const result = await Finance.aggregate([
+        { $match: searchParam },
+        // { $project: { type: 1 } },
+        { $sort: { month: 1 } },
+      ]);
+
+      return res.status(200).json(result);
     }
 
     // const result = await Finance.aggregate([

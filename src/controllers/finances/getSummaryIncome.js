@@ -15,16 +15,18 @@ async function getSummaryIncome(req, res) {
     const result = await Finance.aggregate([
       { $match: searchParam },
       { $project: { amount: 1, owner: 1 } },
-      { $group: { _id: "amount", amount: { $sum: "$amount" } } },
+      { $group: { _id: "amount", totalAmount: { $sum: "$amount" } } },
     ]);
     // console.log("getSummaryIncome result", result.length, result);
 
     if (result.length === 1) {
-      const { amount } = result[0];
-      return res.status(200).json({ ...searchParam, amount });
+      const { totalAmount } = result[0];
+      return res.status(200).json({ ...searchParam, totalAmount });
     }
 
-    return res.status(200).json({ amount: 0, message: "no result" });
+    return res
+      .status(200)
+      .json({ amount: 0, ...searchParam, message: "no result" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
