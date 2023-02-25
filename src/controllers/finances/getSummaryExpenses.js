@@ -26,7 +26,7 @@ async function getSummaryExpenses(req, res) {
 
     return res
       .status(200)
-      .json({ amount: 0, ...searchParam, message: "no result" });
+      .json({ totalAmount: 0, ...searchParam, message: "no result" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

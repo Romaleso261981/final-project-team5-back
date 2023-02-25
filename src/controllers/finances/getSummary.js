@@ -53,7 +53,7 @@ async function getSummary(req, res) {
 
     return res.status(200).json([
       {
-        amount: 0,
+        totalAmount: 0,
         ...searchParam,
         countmonth: count,
         message: "no result",
