@@ -3,8 +3,8 @@ const { Types } = require("mongoose");
 
 async function getReports(req, res) {
   const owner = req.user.id;
-  // form = 1 responce("all transactions in one massive")
-  // form = 2 responce("all transactions in one massive")
+  // def responce("all transactions in one massive")
+  // total=2 responce("totalAmount expenses","totalAmount income")
   // type: "0" or "expenses" or "income"
   const {
     total = 1,
@@ -18,8 +18,8 @@ async function getReports(req, res) {
     month: parseInt(month),
     year: parseInt(year),
   };
-  console.log("req.query", req.query);
-  console.log("getReports searchParam", searchParam);
+  // console.log("req.query", req.query);
+  // console.log("getReports searchParam", searchParam);
 
   try {
     if (total == 1 && type === "0") {

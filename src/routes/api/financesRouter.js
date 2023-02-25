@@ -26,8 +26,8 @@ router.get("/summary/expenses", financeController.getSummaryExpenses);
 router.get("/summary/income", financeController.getSummaryIncome);
 router.get("/summary", financeController.getSummary);
 
-module.exports = router;
-
 // 13. Реалізувати енд-поінт отримання докладної інформації (дивитися макет)
 //     про витрати та доходи за конкретні місяць та рік
 router.get("/reports", financeController.getReports);
+
+module.exports = router;

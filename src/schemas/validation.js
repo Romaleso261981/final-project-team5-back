@@ -70,7 +70,7 @@ const validateDeleteTransactionShema = Joi.object({
 });
 
 const validateBalanceShema = Joi.object({
-  value: Joi.number().required().positive().precision(2).min(0.01).messages({
+  balance: Joi.number().required().positive().precision(2).min(0.01).messages({
     "number.value": ERROR_MESSAGES.invalidEmailFormat,
     "any.required": ERROR_MESSAGES.missingField,
     "number.positive": ERROR_MESSAGES.invalidValue,
@@ -79,15 +79,10 @@ const validateBalanceShema = Joi.object({
   }),
 });
 
-const schemaBalance = Joi.object({
-  balance: Joi.number().required().positive(),
-});
-
 module.exports = {
   validateRegisterSchema,
   validateGetTransactionShema,
   validateAddTransactionShema,
   validateDeleteTransactionShema,
   validateBalanceShema,
-  schemaBalance,
 };

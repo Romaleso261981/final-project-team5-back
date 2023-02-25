@@ -2,9 +2,9 @@ const getBalance = require("./getBalance");
 const setBalance = require("./setBalance");
 
 const getFinance = require("./getFinance");
-const addTransaction = require("./addTransaction");
 const addExpenses = require("./addExpenses");
 const addIncome = require("./addIncome");
+const addTransaction = require("./addTransaction");
 const deleteTransaction = require("./deleteTransaction");
 
 const getSummary = require("./getSummary");
