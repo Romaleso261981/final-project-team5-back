@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../schemas/user");
-const validateRegisterSchema = require("../../schemas/validation");
+const { validateRegisterSchema } = require("../../schemas/validation");
 
 const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
@@ -27,7 +27,7 @@ async function login(req, res, next) {
       id: user._id,
     };
     const token = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: "2m" });
-    const refreshToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
     });
     await User.findByIdAndUpdate(user._id, { token, refreshToken });

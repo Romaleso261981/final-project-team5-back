@@ -5,4 +5,8 @@ const validateRegisterSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
-module.exports = validateRegisterSchema;
+const refreshSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
+module.exports = { validateRegisterSchema, refreshSchema };
