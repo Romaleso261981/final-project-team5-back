@@ -1,0 +1,557 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "0.0.1",
+    "title": "Kapu$ta API 1.0",
+    "description": "team5 back-end API for [kapu$ta](https://kapusta.click)",
+    "contact": {
+      "email": "kapusta@kapusta.click"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://back.kapusta.click"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Finance",
+      "description": "Finances endpoints"
+    }
+  ],
+  "paths": {
+    "/auth/users/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "RegistrationRequest",
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "title",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "description",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "description",
+                      "example": 201
+                    },
+                    "user": {
+                      "type": "object",
+                      "description": "description",
+                      "example": {
+                        "email": "userEmail",
+                        "avatar": "avatarURL"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "title",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "description",
+                      "example": "Invalid value of email or password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "title",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "description",
+                      "example": "Email in use"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "security": [],
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "LoginRequest",
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "title",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "description",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "description",
+                      "example": 200
+                    },
+                    "token": {
+                      "type": "string",
+                      "description": "description",
+                      "example": "token"
+                    },
+                    "user": {
+                      "type": "object",
+                      "description": "description",
+                      "example": {
+                        "email": "userEmail"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "по факту код 200 OK - и это нужно поменять на код 401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "title",
+                  "type": "object",
+                  "example": {
+                    "message": "Your Email is not verifyied!"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request \"validate error\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "title",
+                  "type": "object",
+                  "example": {
+                    "message": "Wrong email or password"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (one of the \"message\")",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "title",
+                  "type": "object",
+                  "example": [
+                    {
+                      "message": "Email or password is wrong"
+                    },
+                    {
+                      "message": "Your Email is not verifyied!"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/users/current": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User current",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "googleAuth",
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/google-redirect": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "googleRedirect",
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/users/balance": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "User balance update",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "New balance",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/BalanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/BalanceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get user balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "example": "10000"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/finances/": {
+      "get": {
+        "tags": ["Finance"],
+        "summary": "getAllFinances",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Finance"],
+        "summary": "addFinance",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/finances/financeId": {
+      "get": {
+        "tags": ["Finance"],
+        "summary": "getFinance",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["Finance"],
+        "summary": "editFinance",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Finance"],
+        "summary": "deleteFinance",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "BalanceRequest": {
+        "type": "object",
+        "required": ["balance"],
+        "properties": {
+          "balance": {
+            "type": "integer",
+            "description": "User`s balance",
+            "example": "10000"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "avatar": {
+              "type": "string",
+              "description": "User's avatar",
+              "example": "avatarURL"
+            }
+          }
+        },
+        "example": [
+          {
+            "email": "mail@gmail.com",
+            "avatar": "avatarURL"
+          }
+        ]
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User`s id",
+            "example": "630a521d9f4c9180f0"
+          },
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+          "token": {
+            "type": "string",
+            "description": "Token",
+            "example": "q1w2e3r4t5y6u7i8o9p0"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User`s avatar",
+            "example": ""
+          },
+          "balance": {
+            "type": "integer",
+            "description": "User`s balance",
+            "example": "10000"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
