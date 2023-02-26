@@ -1,7 +1,7 @@
 const queryString = require("querystring");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY, BASE_URL, FRONTEND_URL } = process.env;
+const { ACCESS_SECRET_KEY, BASE_URL, FRONTEND_URL } = process.env;
 const { User } = require("../../schemas/user");
 const { v4: uuidv4 } = require("uuid");
 
@@ -53,9 +53,11 @@ const googleRedirect = async (req, res) => {
     const payload = {
       id: user._id,
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-    await User.findByIdAndUpdate(user._id, { token });
-    return res.redirect(`${FRONTEND_URL}?token=${token}`);
+    const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
+      expiresIn: "24h",
+    });
+    await User.findByIdAndUpdate(user._id, { accessToken });
+    return res.redirect(`${FRONTEND_URL}?accessToken=${accessToken}`);
   } else {
     const newUser = await User.create({
       email,
@@ -66,10 +68,12 @@ const googleRedirect = async (req, res) => {
     const payload = {
       id: newUser._id,
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-    await User.findByIdAndUpdate(newUser._id, { token });
+    const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
+      expiresIn: "24h",
+    });
+    await User.findByIdAndUpdate(newUser._id, { accessToken });
 
-    return res.redirect(`${FRONTEND_URL}?token=${token}`);
+    return res.redirect(`${FRONTEND_URL}?accessToken=${accessToken}`);
   }
 };
 module.exports = {
