@@ -11,7 +11,7 @@ const schema = mongoose.Schema(
       required: [true, "Email is required"],
       unique: true,
     },
-    token: {
+    accessToken: {
       type: String,
       default: null,
     },
@@ -19,6 +19,10 @@ const schema = mongoose.Schema(
       type: String,
       default: null,
     },
+    // token: {
+    //   type: String,
+    //   default: null,
+    // },
     verify: {
       type: Boolean,
       default: false,
