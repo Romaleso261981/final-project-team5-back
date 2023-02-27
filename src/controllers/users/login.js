@@ -10,17 +10,17 @@ async function login(req, res, next) {
     const { email, password } = req.body;
     const { error } = validateRegisterSchema.validate(req.body);
     if (error) {
-      res.status(400).json({ message: "Wrong email or password" });
+      return res.status(400).json({ message: "Wrong email or password" });
     }
 
     const user = await User.findOne({ email });
     const userPassword = await bcrypt.compare(password, user.password);
     if (!user || !userPassword) {
-      res.status(401).json({ message: "Email or password is wrong" });
+      return res.status(401).json({ message: "Email or password is wrong" });
     }
 
     if (!user.verify) {
-      res.json({ message: "Your Email is not verifyied!" });
+      return res.status(401).json({ message: "Your Email is not verifyied!" });
     }
 
     const payload = {
@@ -31,7 +31,7 @@ async function login(req, res, next) {
       expiresIn: "7d",
     });
     await User.findByIdAndUpdate(user._id, { token, refreshToken });
-    res.json({
+    res.status(200).json({
       status: "success",
       code: 200,
       token: token,
@@ -41,7 +41,7 @@ async function login(req, res, next) {
       },
     });
   } catch (error) {
-    next(error);
+    return res.status(500).json({ message: error.message });
   }
 }
 
