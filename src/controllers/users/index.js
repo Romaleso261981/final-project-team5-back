@@ -4,6 +4,7 @@ const logout = require("./logout");
 const current = require("./current");
 const verifyEmail = require("./verifyEmail")
 const resendEmail = require("./resendEmail")
+const refresh = require("./refresh")
 const { googleAuth } = require("./google");
 const { googleRedirect } = require("./google");
 
@@ -16,4 +17,5 @@ module.exports = {
   googleRedirect,
   verifyEmail,
   resendEmail,
+  refresh
 };
