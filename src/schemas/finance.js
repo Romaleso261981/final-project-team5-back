@@ -1,26 +1,22 @@
 const { Schema, model } = require("mongoose");
-const { TRANSACTION_TYPES } = require("../utils/constants");
-const getBalance = require("../utils/getBalance");
+const { User } = require("./user");
 
 const schemaFinances = new Schema({
   date: {
-    type: { type: Date, default: Date.now },
+    type: Date,
+    default: Date.now,
   },
   description: {
     type: String,
-  },
-  completedAt: {
-    type: Date,
-    required: [true, "Unset transaction date"],
+    default: "",
   },
   category: {
-    type: Schema.Types.ObjectId,
-    ref: "product-category",
-    required: [true, "Set category of product for finance"],
+    type: String,
+    required: [true, "Set category for transaction"],
   },
   amount: {
     type: Number,
-    required: [true, "Set amount for finance"],
+    required: [true, "Set amount for transaction"],
   },
   currency: {
     type: String,
@@ -30,12 +26,29 @@ const schemaFinances = new Schema({
   type: {
     type: String,
     enum: ["expenses", "income"],
-    required: [true, "Set type of transaction for finance"],
+    required: [true, "Set type for transaction"],
   },
   owner: {
     type: Schema.Types.ObjectId,
     ref: "user",
-    required: [true, "Set record owner of transaction for finance"],
+    required: [true, "Set owner id for transaction"],
+  },
+  month: {
+    type: Number,
+    min: 1,
+    max: 12,
+    required: [true, "Set month for transaction"],
+  },
+  year: {
+    type: Number,
+    min: 2000,
+    max: 3000,
+    required: [true, "Set year for transaction"],
+  },
+  day: {
+    type: Number,
+    min: 1,
+    max: 31,
   },
 });
 
@@ -43,24 +56,18 @@ const schemaFinances = new Schema({
 schemaFinances.pre("save", { document: true }, async function (next) {
   const { owner, type, amount } = this;
 
-  const doc = await model("balance").findOne({ owner });
-
-  if (!doc) throw new Error("balance entry fee not set");
-
-  const currentBalance = getBalance(doc);
-
-  if (
-    type.toLowerCase() === TRANSACTION_TYPES.CREDIT &&
-    currentBalance < amount
-  ) {
-    throw new Error("insufficient balance");
+  const storedUser = await User.findById(owner);
+  if (storedUser) {
+    var { balance } = storedUser;
+    if (type === "income") {
+      balance = balance + amount;
+    }
+    if (type === "expenses") {
+      balance = balance - amount;
+    }
+    await User.findByIdAndUpdate(owner, { balance });
   }
 
-  type.toLowerCase() === TRANSACTION_TYPES.CREDIT
-    ? (doc.totalCost += amount)
-    : (doc.totalIncome += amount);
-
-  doc.save();
   next();
 });
 
@@ -79,24 +86,19 @@ schemaFinances.pre(
 
     const { owner, type, amount } = transaction;
 
-    const doc = await model("balance").findOne({ owner });
+    const storedUser = await User.findById(owner);
 
-    if (!doc) throw new Error("balance entry fee not set");
-
-    const currentBalance = getBalance(doc);
-
-    if (
-      type.toLowerCase() === TRANSACTION_TYPES.DEBIT &&
-      currentBalance < amount
-    ) {
-      throw new Error("Execution error. Negative balance expected");
+    if (storedUser) {
+      var { balance } = storedUser;
+      if (type === "income") {
+        balance = balance - amount;
+      }
+      if (type === "expenses") {
+        balance = balance + amount;
+      }
+      await User.findByIdAndUpdate(owner, { balance });
     }
 
-    type.toLowerCase() === TRANSACTION_TYPES.DEBIT
-      ? (doc.totalIncome -= amount)
-      : (doc.totalCost -= amount);
-
-    doc.save();
     next();
   }
 );

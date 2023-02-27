@@ -32,7 +32,9 @@ async function login(req, res, next) {
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
     });
+
     await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
+
     res.status(200).json({
       status: "success",
       code: 200,

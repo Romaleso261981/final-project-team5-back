@@ -10,7 +10,10 @@
   },
   "servers": [
     {
-      "url": "http://back.kapusta.click"
+      "url": "https://back.kapusta.click"
+    },
+    {
+      "url": "http://localhost:3000"
     }
   ],
   "tags": [
@@ -26,7 +29,9 @@
   "paths": {
     "/auth/users/signup": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "User registration",
         "parameters": [],
         "security": [],
@@ -36,21 +41,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "title": "RegistrationRequest",
-                "type": "object",
-                "required": ["email", "password"],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "User's email",
-                    "format": "email"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "User's password",
-                    "example": "qwerty123"
-                  }
-                }
+                "$ref": "#/components/schemas/SignupAndLoginRequest"
               }
             }
           }
@@ -61,7 +52,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "title",
+                  "title": "201",
                   "type": "object",
                   "properties": {
                     "status": {
@@ -78,8 +69,7 @@
                       "type": "object",
                       "description": "description",
                       "example": {
-                        "email": "userEmail",
-                        "avatar": "avatarURL"
+                        "email": "userEmail"
                       }
                     }
                   }
@@ -92,7 +82,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "title",
+                  "title": "400",
                   "type": "object",
                   "properties": {
                     "message": {
@@ -110,7 +100,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "title",
+                  "title": "409",
                   "type": "object",
                   "properties": {
                     "message": {
@@ -122,13 +112,29 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/users/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "User login",
         "parameters": [],
         "security": [],
@@ -138,21 +144,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "title": "LoginRequest",
-                "type": "object",
-                "required": ["email", "password"],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "User's email",
-                    "format": "email"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "User's password",
-                    "example": "qwerty123"
-                  }
-                }
+                "$ref": "#/components/schemas/SignupAndLoginRequest"
               }
             }
           }
@@ -163,19 +155,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "title",
+                  "title": "200",
                   "type": "object",
                   "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "description",
-                      "example": "success"
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "description",
-                      "example": 200
-                    },
                     "token": {
                       "type": "string",
                       "description": "description",
@@ -193,26 +175,12 @@
               }
             }
           },
-          "201": {
-            "description": "по факту код 200 OK - и это нужно поменять на код 401",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "title",
-                  "type": "object",
-                  "example": {
-                    "message": "Your Email is not verifyied!"
-                  }
-                }
-              }
-            }
-          },
           "400": {
             "description": "Bad Request \"validate error\"",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "title",
+                  "title": "400",
                   "type": "object",
                   "example": {
                     "message": "Wrong email or password"
@@ -226,7 +194,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "title",
+                  "title": "401",
                   "type": "object",
                   "example": [
                     {
@@ -243,9 +211,141 @@
         }
       }
     },
-    "/auth/users/logout": {
+    "/auth/users/verify/{verificationToken}": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Verification token",
+        "parameters": [
+          {
+            "name": "verificationToken",
+            "in": "path",
+            "description": "Verification Token string",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "200",
+                  "type": "object",
+                  "example": {
+                    "message": "Verification successful"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "404",
+                  "type": "object",
+                  "example": {
+                    "message": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/users/resend": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Resend email for verification token",
+        "parameters": [],
+        "security": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "200",
+                  "type": "object",
+                  "example": {
+                    "message": "Verification email sended"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (one of the \"message\")",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "400",
+                  "type": "object",
+                  "example": [
+                    {
+                      "message": "missing required field email"
+                    },
+                    {
+                      "message": "Verification has been already passed"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/users/logout": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
         "summary": "User logout",
         "parameters": [],
         "security": [
@@ -254,16 +354,32 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Successful operation",
+          "204": {
+            "description": "No Content \"Successful operation\"",
             "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/users/current": {
-      "post": {
-        "tags": ["Auth"],
+      "get": {
+        "tags": [
+          "Auth"
+        ],
         "summary": "User current",
         "parameters": [],
         "security": [
@@ -273,44 +389,122 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {}
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "200",
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "description": "description",
+                      "example": {
+                        "email": "userEmail"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/google": {
+    "/auth/users/google": {
       "get": {
-        "tags": ["Auth"],
-        "summary": "googleAuth",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Google Auth",
         "parameters": [],
         "security": [],
         "responses": {
-          "200": {
-            "description": "Successful operation",
+          "308": {
+            "description": "Permanent Redirect (to oauth2.googleapis.com)",
             "content": {}
           }
         }
       }
     },
-    "/google-redirect": {
+    "/auth/users/google-redirect": {
       "get": {
-        "tags": ["Auth"],
-        "summary": "googleRedirect",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Google Redirect",
         "parameters": [],
         "security": [],
         "responses": {
-          "200": {
-            "description": "Successful operation",
+          "308": {
+            "description": "Permanent Redirect (to FRONTEND_URL)",
             "content": {}
           }
         }
       }
     },
-    "/auth/users/balance": {
-      "patch": {
-        "tags": ["Auth"],
-        "summary": "User balance update",
+    "/api/finances/balance": {
+      "get": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Get user balance",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "200",
+                  "type": "object",
+                  "example": {
+                    "balance": 100000
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "401",
+                  "type": "object",
+                  "example": {
+                    "message": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Set user balance",
         "parameters": [],
         "security": [
           {
@@ -318,70 +512,131 @@
           }
         ],
         "requestBody": {
-          "description": "New balance",
+          "description": "Registration's object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#components/schemas/BalanceRequest"
+                "type": "object",
+                "required": [
+                  "balance"
+                ],
+                "properties": {
+                  "balance": {
+                    "type": "integer",
+                    "example": 100000
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "OK \"Successful operation\"",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#components/schemas/BalanceResponse"
+                  "title": "200",
+                  "type": "object",
+                  "example": {
+                    "balance": 100000
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (one of the \"message\")",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "400",
+                  "type": "object",
+                  "example": [
+                    {
+                      "message": "missing fields"
+                    },
+                    {
+                      "message": "invalid value content"
+                    }
+                  ]
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized",
-            "content": {}
-          },
-          "500": {
-            "description": "Server error",
-            "content": {}
-          }
-        }
-      },
-      "get": {
-        "tags": ["Auth"],
-        "summary": "Get user balance",
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-        "responses": {
-          "201": {
-            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "example": "10000"
+                  "title": "401",
+                  "type": "object",
+                  "example": {
+                    "message": "User not found"
+                  }
                 }
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
-            "content": {}
-          },
           "500": {
-            "description": "Server error",
-            "content": {}
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/finances/": {
       "get": {
-        "tags": ["Finance"],
-        "summary": "getAllFinances",
-        "parameters": [],
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Get transactions",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type of transactions",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": [
+                "expenses",
+                "income"
+              ]
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Month of transactions",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year of transactions",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 2023
+            }
+          }
+        ],
         "security": [
           {
             "Bearer": []
@@ -389,65 +644,242 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {}
+            "description": "OK \"Successful operation\" (array of objects)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
-        "tags": ["Finance"],
-        "summary": "addFinance",
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Add transaction",
         "parameters": [],
         "security": [
           {
             "Bearer": []
           }
         ],
+        "requestBody": {
+          "description": "Transaction's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionsRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {}
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "400",
+                  "type": "object",
+                  "example": {
+                    "message": "missing fields"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/finances/financeId": {
-      "get": {
-        "tags": ["Finance"],
-        "summary": "getFinance",
+    "/api/finances/expenses": {
+      "post": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Add expenses transaction",
         "parameters": [],
         "security": [
           {
             "Bearer": []
           }
         ],
+        "requestBody": {
+          "description": "Transaction's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionsExpensesRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {}
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "400",
+                  "type": "object",
+                  "example": {
+                    "message": "missing fields"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
-      },
-      "put": {
-        "tags": ["Finance"],
-        "summary": "editFinance",
+      }
+    },
+    "/api/finances/income": {
+      "post": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Add income transaction",
         "parameters": [],
         "security": [
           {
             "Bearer": []
           }
         ],
+        "requestBody": {
+          "description": "Transaction's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionsIncomeRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {}
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsIncomeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "400",
+                  "type": "object",
+                  "example": {
+                    "message": "missing fields"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
-      },
+      }
+    },
+    "/api/finances/{transactionId}": {
       "delete": {
-        "tags": ["Finance"],
-        "summary": "deleteFinance",
-        "parameters": [],
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Delete transaction",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "description": "Transaction Id string",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
             "Bearer": []
@@ -456,7 +888,292 @@
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "200",
+                  "type": "object",
+                  "example": {
+                    "message": "Transaction deleted"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "404",
+                  "type": "object",
+                  "example": {
+                    "message": "Not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finances/summary/expenses": {
+      "get": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Get summary expenses of month",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Month of summary",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year of summary",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 2023
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryExpensesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finances/summary/income": {
+      "get": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Get summary income of month",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Month of summary",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year of summary",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 2023
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryIncomeResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finances/summary": {
+      "get": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Get summary for the last 6 months Amounts",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type of transactions",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": [
+                "expenses",
+                "income"
+              ]
+            }
+          },
+          {
+            "name": "countmonth",
+            "in": "query",
+            "description": "Month of transactions",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 6
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK \"Successful operation\" (array of objects)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "200",
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "object",
+                      "description": "description",
+                      "example": {
+                        "year": 2023,
+                        "month": 3
+                      }
+                    },
+                    "totalAmount": {
+                      "example": 30000
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finances/reports": {
+      "get": {
+        "tags": [
+          "Finance"
+        ],
+        "summary": "Get all transactions of month",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Month of summary",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year of summary",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 2023
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK \"Successful operation\" (array of objects)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -464,9 +1181,12 @@
   },
   "components": {
     "schemas": {
-      "RegistrationRequest": {
+      "SignupAndLoginRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -480,68 +1200,287 @@
           }
         }
       },
-      "BalanceRequest": {
+      "TransactionsRequest": {
         "type": "object",
-        "required": ["balance"],
+        "required": [
+          "category",
+          "amount",
+          "type",
+          "month",
+          "year"
+        ],
         "properties": {
-          "balance": {
+          "description": {
+            "type": "string",
+            "description": "transaction description",
+            "example": "salat"
+          },
+          "category": {
+            "type": "string",
+            "description": "transaction category",
+            "example": "production"
+          },
+          "amount": {
             "type": "integer",
-            "description": "User`s balance",
-            "example": "10000"
+            "description": "amount",
+            "example": 100
+          },
+          "type": {
+            "type": "string",
+            "description": "type of transaction",
+            "example": "expenses"
+          },
+          "month": {
+            "type": "integer",
+            "description": "month of transaction",
+            "example": 3
+          },
+          "year": {
+            "type": "integer",
+            "description": "year of transaction",
+            "example": 2023
           }
         }
       },
-      "RegistrationResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "avatar": {
-              "type": "string",
-              "description": "User's avatar",
-              "example": "avatarURL"
-            }
+      "TransactionsExpensesRequest": {
+        "type": "object",
+        "required": [
+          "category",
+          "amount",
+          "month",
+          "year"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "transaction description",
+            "example": "salat"
+          },
+          "category": {
+            "type": "string",
+            "description": "transaction category",
+            "example": "production"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "amount",
+            "example": 100
+          },
+          "month": {
+            "type": "integer",
+            "description": "month of transaction",
+            "example": 3
+          },
+          "year": {
+            "type": "integer",
+            "description": "year of transaction",
+            "example": 2023
           }
-        },
-        "example": [
-          {
-            "email": "mail@gmail.com",
-            "avatar": "avatarURL"
-          }
-        ]
+        }
       },
-      "BalanceResponse": {
+      "TransactionsIncomeRequest": {
+        "type": "object",
+        "required": [
+          "category",
+          "amount",
+          "month",
+          "year"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "transaction description",
+            "example": "my"
+          },
+          "category": {
+            "type": "string",
+            "description": "transaction category",
+            "example": "salary"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "amount",
+            "example": 99000
+          },
+          "month": {
+            "type": "integer",
+            "description": "month of transaction",
+            "example": 3
+          },
+          "year": {
+            "type": "integer",
+            "description": "year of transaction",
+            "example": 2023
+          }
+        }
+      },
+      "TransactionsResponse": {
         "type": "object",
         "properties": {
           "_id": {
             "type": "string",
-            "description": "User`s id",
-            "example": "630a521d9f4c9180f0"
+            "description": "Transaction id",
+            "example": "63fb87c8c97b95d5cdde1b27"
           },
-          "email": {
+          "description": {
             "type": "string",
-            "description": "User`s email",
-            "format": "email"
+            "description": "transaction description",
+            "example": "salat"
           },
-          "token": {
+          "category": {
             "type": "string",
-            "description": "Token",
-            "example": "q1w2e3r4t5y6u7i8o9p0"
+            "description": "transaction category",
+            "example": "production"
           },
-          "avatarURL": {
-            "type": "string",
-            "description": "User`s avatar",
-            "example": ""
-          },
-          "balance": {
+          "amount": {
             "type": "integer",
-            "description": "User`s balance",
-            "example": "10000"
+            "description": "amount",
+            "example": 100
+          },
+          "currency": {
+            "type": "string",
+            "description": "currency",
+            "example": "UAH"
+          },
+          "type": {
+            "type": "string",
+            "description": "type of transaction",
+            "example": "expenses"
+          },
+          "owner": {
+            "type": "string",
+            "description": "User`s id",
+            "example": "63f8635ce9466b36765fbf24"
+          },
+          "month": {
+            "type": "integer",
+            "description": "month of transaction",
+            "example": 3
+          },
+          "year": {
+            "type": "integer",
+            "description": "year of transaction",
+            "example": 2023
+          },
+          "date": {
+            "type": "string",
+            "description": "date of transaction",
+            "example": "2023-03-24T19:32:27.933Z"
+          }
+        }
+      },
+      "TransactionsIncomeResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Transaction id",
+            "example": "63fb87c8c97b95d5cdde1b28"
+          },
+          "description": {
+            "type": "string",
+            "description": "transaction description",
+            "example": "my"
+          },
+          "category": {
+            "type": "string",
+            "description": "transaction category",
+            "example": "salary"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "amount",
+            "example": 99000
+          },
+          "currency": {
+            "type": "string",
+            "description": "currency",
+            "example": "UAH"
+          },
+          "type": {
+            "type": "string",
+            "description": "type of transaction",
+            "example": "income"
+          },
+          "owner": {
+            "type": "string",
+            "description": "User`s id",
+            "example": "63f8635ce9466b36765fbf24"
+          },
+          "month": {
+            "type": "integer",
+            "description": "month of transaction",
+            "example": 3
+          },
+          "year": {
+            "type": "integer",
+            "description": "year of transaction",
+            "example": 2023
+          },
+          "date": {
+            "type": "string",
+            "description": "date of transaction",
+            "example": "2023-03-24T19:32:27.933Z"
+          }
+        }
+      },
+      "SummaryExpensesResponse": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "User`s id",
+            "example": "63f8635ce9466b36765fbf24"
+          },
+          "type": {
+            "type": "string",
+            "description": "type of transaction",
+            "example": "expenses"
+          },
+          "month": {
+            "type": "integer",
+            "description": "month of summary",
+            "example": 3
+          },
+          "year": {
+            "type": "integer",
+            "description": "year of summary",
+            "example": 2023
+          },
+          "totalAmount": {
+            "type": "integer",
+            "description": "total amount",
+            "example": 32000
+          }
+        }
+      },
+      "SummaryIncomeResponse": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "User`s id",
+            "example": "63f8635ce9466b36765fbf24"
+          },
+          "type": {
+            "type": "string",
+            "description": "type of transaction",
+            "example": "income"
+          },
+          "month": {
+            "type": "integer",
+            "description": "month of summary",
+            "example": 3
+          },
+          "year": {
+            "type": "integer",
+            "description": "year of summary",
+            "example": 2023
+          },
+          "totalAmount": {
+            "type": "integer",
+            "description": "total amount",
+            "example": 300000
           }
         }
       }
