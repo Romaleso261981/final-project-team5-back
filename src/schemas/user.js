@@ -19,10 +19,10 @@ const schema = mongoose.Schema(
       type: String,
       default: null,
     },
-    // token: {
-    //   type: String,
-    //   default: null,
-    // },
+    token: {
+      type: String,
+      default: null,
+    },
     verify: {
       type: Boolean,
       default: false,
