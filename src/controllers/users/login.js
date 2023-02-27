@@ -27,7 +27,7 @@ async function login(req, res, next) {
       id: user._id,
     };
     const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-      expiresIn: "2m",
+      expiresIn: "15m",
     });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
@@ -35,7 +35,7 @@ async function login(req, res, next) {
 
     await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       code: 200,
       accessToken: accessToken,

@@ -9,12 +9,12 @@ const refresh = async (req, res, next) => {
     const { error } = refreshSchema.validate(req.body);
 
     if (error) {
-      res.status(403).json({ message: "Wrong token" });
+      return res.status(403).json({ message: "Wrong token" });
     }
     const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
     const isExist = await User.findOne({ refreshToken: token });
     if (!isExist) {
-      res.status(403).json({ message: "Token is not valid" });
+      return res.status(403).json({ message: "Token is not valid" });
     }
 
     const payload = {
@@ -28,12 +28,12 @@ const refresh = async (req, res, next) => {
       expiresIn: "7d",
     });
 
-    res.json({
+    return res.status(200).json({
       accessToken,
       refreshToken,
     });
   } catch (error) {
-    next(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
