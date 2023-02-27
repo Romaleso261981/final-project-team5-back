@@ -26,15 +26,19 @@ async function login(req, res, next) {
     const payload = {
       id: user._id,
     };
-    const token = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: "2m" });
+    const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
+      expiresIn: "2m",
+    });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
     });
-    await User.findByIdAndUpdate(user._id, { token, refreshToken });
+
+    await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
+
     res.status(200).json({
       status: "success",
       code: 200,
-      token: token,
+      accessToken: accessToken,
       refreshToken: refreshToken,
       user: {
         email: user.email,
