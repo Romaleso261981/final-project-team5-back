@@ -6,6 +6,10 @@ const validateRegisterSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+const refreshSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
 const validateGetTransactionShema = Joi.object({
   type: Joi.string()
     .required()
@@ -85,4 +89,6 @@ module.exports = {
   validateAddTransactionShema,
   validateDeleteTransactionShema,
   validateBalanceShema,
+  validateRegisterSchema, 
+  refreshSchema
 };
