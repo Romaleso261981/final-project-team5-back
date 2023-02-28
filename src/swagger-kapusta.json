@@ -11,9 +11,6 @@
   "servers": [
     {
       "url": "https://back.kapusta.click"
-    },
-    {
-      "url": "http://localhost:3000"
     }
   ],
   "tags": [
@@ -158,7 +155,22 @@
                   "title": "200",
                   "type": "object",
                   "properties": {
-                    "token": {
+                    "status": {
+                      "type": "string",
+                      "description": "description",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "description",
+                      "example": 200
+                    },
+                    "accessToken": {
+                      "type": "string",
+                      "description": "description",
+                      "example": "token"
+                    },
+                    "refreshToken": {
                       "type": "string",
                       "description": "description",
                       "example": "token"
@@ -204,6 +216,20 @@
                       "message": "Your Email is not verifyied!"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
                 }
               }
             }
@@ -270,7 +296,7 @@
         "parameters": [],
         "security": [],
         "requestBody": {
-          "description": "Registration's object",
+          "description": "Resend email object",
           "required": true,
           "content": {
             "application/json": {
@@ -404,6 +430,86 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "500",
+                  "type": "object",
+                  "example": {
+                    "message": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/users/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User refresh token",
+        "parameters": [],
+        "security": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "refreshToken"
+                ],
+                "properties": {
+                  "refreshToken": {
+                    "type": "string",
+                    "format": "token"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK \"Successful operation\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "200",
+                  "type": "object",
+                  "example": {
+                    "accessToken": "token",
+                    "refreshToken": "token"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (one of the \"message\")",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "403",
+                  "type": "object",
+                  "example": [
+                    {
+                      "message": "Wrong token"
+                    },
+                    {
+                      "message": "Token is not valid"
+                    }
+                  ]
                 }
               }
             }
