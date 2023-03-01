@@ -1,33 +1,35 @@
-## GoIT Node.js Course Template Homework
+GoIT: HTML-SCSS, JavaScript, ReactJS, Node.js
 
-Kapu$ta team5 final project
+Final team5 project "Kapu$ta" - backend
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+Pet-project - back-end part of the application "Kapu$ta". This application is for keeping records of expenses and income of the user with the ability to receive general and detailed reports for a certain period.
 
-Додайте ментора до колаборації
+Technologies used:
 
-Для кожної домашньої роботи створюйте свою гілку.
+- Node.js
+- Express
+- MongoDB Atlas
+- Mongoose
+- bcryptjs
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+Commands:
 
-Кожна нова гілка для др повинна робитися з master
+"npm run start:dev" - - start the server in development mode
+"npm run lint" - running a code check with eslint
+"npm run lint:fix" - running a code check with eslint with automatic fixes for simple errors
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+Api:
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+/api-docs - swagger-ui
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+/api/finances/summary?type=income&month=2&year=2023 - totalAmount income for the specified month
+/api/finances/summary?type=expenses&month=2&year=2023 - totalAmount expenses for the specified month
+/api/finances/summary?type=income&countmonth=6 - for Summary totalAmount income in the last 6 months
+/api/finances/summary?type=expenses&countmonth=6 - for Summary totalAmount expenses in the last 6 months
 
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+/api/finances/reports?month=2&year=2023 - an array of objects of all transactions for the specified month
+/api/finances/reports?month=2&year=2023&total=2 - for the specified month "totalAmount expenses" and "totalAmount income"
+/api/finances/reports?month=2&year=2023&type=expenses - for the specified month expenses totalAmount by category
+/api/finances/reports?month=2&year=2023&type=income - for the specified month income totalAmount by category
+/api/finances/reports?month=2&year=2023&type=expenses&category=housing - for the specified month expenses transactions by category
+/api/finances/reports?month=2&year=2023&type=income&category=salary - for the specified month income transactions by category
