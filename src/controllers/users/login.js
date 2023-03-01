@@ -27,7 +27,7 @@ async function login(req, res, next) {
       id: user._id,
     };
     const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-      expiresIn: "15m",
+      expiresIn: "1m",
     });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
