@@ -12,7 +12,6 @@ async function getSummary(req, res) {
     month: parseInt(month),
     year: parseInt(year),
   };
-  // console.log("getSummary searchParam", searchParam);
   try {
     if (count == 0) {
       const result = await Finance.aggregate([
@@ -25,7 +24,6 @@ async function getSummary(req, res) {
           },
         },
       ]);
-      // console.log("getSummary result", result.length, result);
       if (result.length === 1) {
         return res.status(200).json(result);
       }
@@ -47,7 +45,6 @@ async function getSummary(req, res) {
         { $sort: { _id: -1 } },
         { $limit: count },
       ]);
-      // console.log("goodSummary result", result.length, result);
       return res.status(200).json(result);
     }
 

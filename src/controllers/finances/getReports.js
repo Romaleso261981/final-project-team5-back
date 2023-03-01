@@ -18,8 +18,6 @@ async function getReports(req, res) {
     month: parseInt(month),
     year: parseInt(year),
   };
-  // console.log("req.query", req.query);
-  // console.log("getReports searchParam", searchParam);
 
   try {
     if (total == 1 && type === "0") {
