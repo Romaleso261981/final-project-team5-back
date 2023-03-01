@@ -11,13 +11,11 @@ async function getSummaryExpenses(req, res) {
     year: parseInt(year),
   };
   try {
-    // console.log("getSummaryExpenses searchParam", searchParam);
     const result = await Finance.aggregate([
       { $match: searchParam },
       { $project: { amount: 1, owner: 1 } },
       { $group: { _id: "amount", totalAmount: { $sum: "$amount" } } },
     ]);
-    // console.log("getSummaryExpenses result", result.length, result);
 
     if (result.length === 1) {
       const { totalAmount } = result[0];

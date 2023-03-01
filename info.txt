@@ -1,16 +1,2 @@
 
-"npm run start:dev" - для запуска сервера в режиме отладки
 
-/api-docs    swagger-ui
-
-/api/finances/summary?type=income&month=2&year=2023    totalAmount income за указаный месяц
-/api/finances/summary?type=expenses&month=2&year=2023  totalAmount expenses за указаный месяц
-/api/finances/summary?type=income&countmonth=6         для Summary totalAmount income последние 6 месяцев
-/api/finances/summary?type=expenses&countmonth=6       для Summary totalAmount expenses последние 6 месяцев
-
-/api/finances/reports?month=2&year=2023                массив объектов всех транзакций за указанный месяц
-/api/finances/reports?month=2&year=2023&total=2        за указаный месяц "totalAmount expenses" и "totalAmount income"
-/api/finances/reports?month=2&year=2023&type=expenses  за указаный месяц expenses totalAmount по категориям
-/api/finances/reports?month=2&year=2023&type=income    за указаный месяц income totalAmount по категориям
-/api/finances/reports?month=2&year=2023&type=expenses&category=housing  за указаный месяц expenses транзакции по категории
-/api/finances/reports?month=2&year=2023&type=income&category=salary     за указаный месяц income транзакции по категории
