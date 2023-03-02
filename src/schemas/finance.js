@@ -58,7 +58,7 @@ schemaFinances.pre("save", { document: true }, async function (next) {
 
   const storedUser = await User.findById(owner);
   if (storedUser) {
-    var { balance } = storedUser;
+    let { balance } = storedUser;
     if (type === "income") {
       balance = balance + amount;
     }

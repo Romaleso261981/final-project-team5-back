@@ -19,7 +19,7 @@ function createEmail(email, verificationToken) {
 
 async function sendEmail(email, verificationToken) {
   sendGrid.setApiKey(SENDGRID_API_KEY);
-  const response = await sendGrid.send(createEmail(email, verificationToken));
+  await sendGrid.send(createEmail(email, verificationToken));
 }
 
 module.exports = sendEmail;

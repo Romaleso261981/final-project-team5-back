@@ -1,13 +1,13 @@
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const { User } = require("../../schemas/user");
-const { validateRegisterSchema } = require("../../schemas/validation");
-const sendEmail = require("../../services/sendEmail");
+const { authSchema } = require("../../schemas/joi");
+// const sendEmail = require("../../services/sendEmail");
 
 async function signup(req, res, next) {
   try {
     const { email, password } = req.body;
-    const { error } = validateRegisterSchema.validate(req.body);
+    const { error } = authSchema.validate(req.body);
     if (error) {
       res.status(400).json({ message: "Invalid value of email or password" });
       return;
@@ -26,10 +26,9 @@ async function signup(req, res, next) {
       email,
       password: hashedPassword,
       verificationToken,
+      verify: true,
     });
-
-    await sendEmail(email, verificationToken);
-
+    // await sendEmail(email, verificationToken);
     return res.status(201).json({
       status: "success",
       code: 201,

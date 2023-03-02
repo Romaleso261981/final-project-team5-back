@@ -1,5 +1,5 @@
 const { User } = require("../../schemas/user");
-const { validateBalanceShema } = require("../../schemas/validation");
+const { balanceShema } = require("../../schemas/joi");
 
 async function setBalance(req, res) {
   const { _id } = req.user;
@@ -9,8 +9,8 @@ async function setBalance(req, res) {
       return res.status(400).json({ message: "missing fields" });
     }
 
-    const validationResult = validateBalanceShema.validate(body);
-    if (validationResult.error) {
+    const { error } = balanceShema.validate(body);
+    if (error) {
       return res.status(400).json({ message: "invalid value content" });
     }
 
