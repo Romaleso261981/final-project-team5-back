@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { User } = require("../../schemas/user");
-const { refreshSchema } = require("../../schemas/validation");
+const { refreshSchema } = require("../../schemas/joi");
 
 const refresh = async (req, res, next) => {
   try {

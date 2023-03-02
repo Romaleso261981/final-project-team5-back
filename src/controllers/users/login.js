@@ -1,14 +1,14 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../schemas/user");
-const { validateRegisterSchema } = require("../../schemas/validation");
+const { authSchema } = require("../../schemas/joi");
 
 const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
 async function login(req, res, next) {
   try {
     const { email, password } = req.body;
-    const { error } = validateRegisterSchema.validate(req.body);
+    const { error } = authSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: "Wrong email or password" });
     }
